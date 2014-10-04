@@ -19,11 +19,40 @@ router.all('*', function(req, res, next) {
 });
 
 router.get('/', function(req, res) {
-  res.status(200).json({status: 'Maruchi you are a fuck'});
+  res.status(200).json({status: 'Time to drink, API is UP'});
 });
 
 router.post('/', function(req, res) {
-  res.status(200).json({status: 'Maruchi you are a fuck'});
+  res.status(200).json({status: 'Time to drink, API is UP'});
+});
+
+router.get('/task/new', function(req, res) {
+  var tasks_helper = require('./lib/tasks.js');
+
+  tasks_helper.getNewBTTask().then(
+    function(new_task) {
+        console.log(new_task.id);
+        console.log(new_task.get('for_item'));
+        res.status(200).json({task_id: new_task.id, item_name: new_task.get('for_item').get('item_name')});
+    },
+    function(error) {
+        res.status(200).json({error: 'Error while retrieving new task ' + error +  ' ' + JSON.stringify(error)});
+    }
+  );
+});
+
+router.post('/task/complete', function(req, res) {
+  var tasks_helper = require('./lib/tasks.js');
+  var task_id = req.query.task_id;
+
+  tasks_helper.completeBTTask(task_id).then(
+    function(task_object) {
+      res.status(200).json({response: 'Sucessfully completed task: ' + task_object.id});
+    },
+    function(error) {
+      res.status(200).json({error: 'Error while completing task ' + error +  ' ' + JSON.stringify(error)});
+    }
+  );
 });
 
 // Register Routes
@@ -32,7 +61,7 @@ app.use('/', router);
 // Register Error Handler
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(500).json({error: 'something broke!'});
+  res.status(500).json({error: 'API is down, sobriety...'});
 });
 
 var server = app.listen(port, function() {
