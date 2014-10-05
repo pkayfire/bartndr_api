@@ -55,6 +55,19 @@ router.post('/task/complete', function(req, res) {
   );
 });
 
+router.get('/braintree/token', function(req, res) {
+  var tasks_helper = require('./lib/tasks.js');
+
+  tasks_helper.getBrainTreeClientToken().then(
+    function(client_token) {
+      res.status(200).json({braintree_client_token: client_token});
+    },
+    function(error) {
+      res.status(200).json({error: 'Error while completing task ' + error +  ' ' + JSON.stringify(error)});
+    }
+  );
+});
+
 // Register Routes
 app.use('/', router);
 
