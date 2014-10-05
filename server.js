@@ -36,7 +36,7 @@ router.get('/task/new', function(req, res) {
         res.status(200).json({task_id: new_task.id, item_name: new_task.get('for_item').get('item_number').toString()});
     },
     function(error) {
-        res.status(200).json({item_name: '-1'});
+        res.status(200).json({task_id: '-1', item_name: '-1'});
     }
   );
 });
